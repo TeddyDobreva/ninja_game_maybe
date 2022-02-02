@@ -1,6 +1,6 @@
-const Game = new Phaser.Game(2000, 900, Phaser.AUTO, 'GameCanvas', {preload,  create, update })
+const Game = new Phaser.Game(1500, 700, Phaser.AUTO, 'GameCanvas', {preload,  create, update })
 
-ninjaSpeed=5
+ninjaSpeed=3
 
 function preload(){
     Game.load.spritesheet("ninja", "ninja_walk.png", 264/4,300/4)
@@ -15,7 +15,7 @@ function create(){
     ninja.animations.add("walk_forewords", [0,1,2,3], 8, true)
     ninja.animations.add("walk_left", [4,5,6,7], 8, true)
     ninja.animations.add("walk_right", [8,9,10,11], 8, true)
-    ninja.animations.add("walk_backwords", [12,13,14,15], 8, true)
+    ninja.animations.add("walk_backwords", [13,14,15,12], 8, true)
 
     keyUp = Game.input.keyboard.addKey(Phaser.Keyboard.UP)
     keyDown = Game.input.keyboard.addKey(Phaser.Keyboard.DOWN)
@@ -28,6 +28,7 @@ function create(){
 }
 
 function update(){
+
 updatePosition()
 }
 
@@ -51,11 +52,12 @@ function updatePosition(){
     }
     }
 
-    if(keyLeft.isDown|| keyA.isDown){
+    if(keyLeft.isDown||keyA.isDown){
 
         if(ninja.x<=0){ninja.x=0}
         
-        else{
+        else 
+        {
             ninja.animations.play("walk_left")
         ninja.x -= ninjaSpeed
     }
@@ -70,8 +72,8 @@ function updatePosition(){
     }
     }
 
-    if((!(keyRight.isDown||keyUp.isDown||keyLeft.isDown||keyDown.isDown))||(keyDown.isDown&&keyUp.isDown)||(keyLeft.isDown&&keyRight.isDown)){
-        ninja.frame=0
+    if((!((keyD.isDown||keyRight.isDown)||(keyUp.isDown||keyW.isDown)||(keyLeft.isDown||keyA.isDown)||(keyDown.isDown||keyS.isDown)))||((keyDown.isDown||keyS.isDown)&&(keyUp.isDown||keyW.isDown))||((keyLeft.isDown||keyA.isDown)&&(keyRight.isDown||keyD.isDown))){
+        ninja.frame=12
     }
 
 }
