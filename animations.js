@@ -4,11 +4,12 @@ ninjaSpeed=3
 
 function preload(){
     Game.load.spritesheet("ninja", "ninja_walk.png", 264/4,300/4)
-
+    Game.load.spritesheet("shuriken", "shuriken.png", 120/4, 25)
 }
 
 function create(){
     Game.stage.backgroundColor="00EEEE"
+    shuriken=Game.add.sprite(0, 0, "shuriken")
     ninja=Game.add.sprite(Game.width/2, Game.height/2, "ninja")
     ninja.frame=0
 
@@ -16,6 +17,7 @@ function create(){
     ninja.animations.add("walk_left", [4,5,6,7], 8, true)
     ninja.animations.add("walk_right", [8,9,10,11], 8, true)
     ninja.animations.add("walk_backwords", [13,14,15,12], 8, true)
+    shuriken.animations.add("rotate", [], 15, true).play()
 
     keyUp = Game.input.keyboard.addKey(Phaser.Keyboard.UP)
     keyDown = Game.input.keyboard.addKey(Phaser.Keyboard.DOWN)
@@ -28,7 +30,7 @@ function create(){
 }
 
 function update(){
-
+shuriken.x+=5
 updatePosition()
 }
 
