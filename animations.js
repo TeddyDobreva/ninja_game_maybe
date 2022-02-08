@@ -38,8 +38,16 @@ function create(){
 }
 
 function update(){
-    if(br>0){ changeWeaponPosition();}
+    if(br>0){ checkWeaponPosition();
+         changeWeaponPosition();}
 updatePosition();
+}
+
+function checkWeaponPosition(){
+    for(let i=0; i<weapons_row1.length;i++){
+        if(weapons_row1[i].x>Game.width){weapons_row1.splice(i,1);
+        br--;}
+   }
 }
 
 function changeWeaponPosition(){
