@@ -1,12 +1,10 @@
-const Game = new Phaser.Game(900, 700, Phaser.AUTO, 'GameCanvas', {preload,  create, update, test })
+const Game = new Phaser.Game(900, 700, Phaser.AUTO, 'GameCanvas', {preload,  create, update })
 
 let ninjaSpeed=3;
 let weaponSpeed=ninjaSpeed+2;
 let timerEvent;
 let br=0;
-max=4;
-let weapons_row1=[max];
-
+let weapons_row1=[];
 
 function preload(){
     Game.load.spritesheet("ninja", "ninja_walk.png", 264/4,300/4);
@@ -16,7 +14,19 @@ function preload(){
 
 function create(){
     Game.stage.backgroundColor="00EEEE";
-    ninja=Game.add.sprite(Game.width/2, Game.height/2, "ninja");
+    ninja1=Game.add.sprite(Game.width/2, 0, "ninja");
+    ninja1.frame=0;
+
+    weapon=Game.add.sprite(55555, 50, "weapon");
+
+    num_of_rows=Game.height/(ninja1.height+weapon.height);
+    for(let i=0; i<num_of_rows; i++){
+    row = Game.add.graphics(0,0);
+    row.beginFill(0x66FBFB);
+    row.drawRect(0,(Game.height/num_of_rows)*2*i , Game.width, Game.height/num_of_rows);
+    }
+
+    ninja=Game.add.sprite((Game.width-ninja1.height)/2, Game.height-ninja1.height, "ninja");
     ninja.frame=0;
 
     ninja.animations.add("walk_forewords", [0,1,2,3], 8, true);
@@ -35,6 +45,8 @@ function create(){
 
     timerEvent=Game.time.events.add(Phaser.Timer.SECOND * 2, shoot, this);
     timerEvent.loop=true;
+  
+
 }
 
 function update(){
@@ -58,7 +70,7 @@ function changeWeaponPosition(){
 }
 
 function shoot(){
-    weapon=Game.add.sprite(-5557, 100, "weapon");
+    weapon=Game.add.sprite(-5557, 50, "weapon");
     weapon.x=0-weapon.width
     weapons_row1[br]=weapon;
     br++;
@@ -108,7 +120,4 @@ function updatePosition(){
         ninja.frame=12;
     }
 
-}
-function test(){
-console.log("walk_left");
 }
