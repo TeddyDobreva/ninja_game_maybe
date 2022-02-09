@@ -72,7 +72,7 @@ function changeWeaponPosition(){
 function shoot(){
     for( i=1; i<=5; i++ ){
     weapon=Game.add.sprite(-5557, 50, "weapon");
-    weapon.x=0-weapon.width
+    weapon.x=0-weapon.width-Math.floor(Math.random() * 6)*weapon.width
     weapon.y=i*(ninja.height+weapon.height)+ninja.height/2
     weapons_per_row[br]=weapon;
     br++;
