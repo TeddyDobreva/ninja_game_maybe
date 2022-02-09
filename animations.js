@@ -4,7 +4,7 @@ let ninjaSpeed=3;
 let weaponSpeed=ninjaSpeed+2;
 let timerEvent;
 let br=0;
-let weapons_row1=[];
+let weapons_per_row=[];
 
 function preload(){
     Game.load.spritesheet("ninja", "ninja_walk.png", 264/4,300/4);
@@ -56,25 +56,27 @@ updatePosition();
 }
 
 function checkWeaponPosition(){
-    for(let i=0; i<weapons_row1.length;i++){
-        if(weapons_row1[i].x>Game.width){weapons_row1.splice(i,1);
+    for(let i=0; i<weapons_per_row.length;i++){
+        if(weapons_per_row[i].x>Game.width){weapons_per_row.splice(i,1);
         br--;}
    }
 }
 
 function changeWeaponPosition(){
-    for(let i=0; i<weapons_row1.length;i++){
-         weapons_row1[i].x+=3;
+    for(let i=0; i<weapons_per_row.length;i++){
+         weapons_per_row[i].x+=3;
     }
    
 }
 
 function shoot(){
+    for( i=1; i<=5; i++ ){
     weapon=Game.add.sprite(-5557, 50, "weapon");
     weapon.x=0-weapon.width
-    weapons_row1[br]=weapon;
+    weapon.y=i*(ninja.height+weapon.height)+ninja.height/2
+    weapons_per_row[br]=weapon;
     br++;
-}
+}}
 
 function updatePosition(){
     if(keyUp.isDown||keyW.isDown){
