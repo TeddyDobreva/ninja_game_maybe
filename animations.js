@@ -4,9 +4,10 @@ let ninjaSpeed=3;
 let weaponSpeed=ninjaSpeed;
 let timerEvent;
 let br=0;
-let weapons_per_row=[];
+let weapons=[];
 
 function preload(){
+    Game.load.spritesheet("you_won", "you_won.png", 2070/3,270);
     Game.load.spritesheet("game_over", "game_over.png", 1110/3,300);
     Game.load.spritesheet("ninja", "ninja_walk.png", 264/4,300/4);
     Game.load.spritesheet("shuriken", "shuriken.png", 120/4, 25);
@@ -17,8 +18,7 @@ function create(){
     Game.stage.backgroundColor="00EEEE";
     ninja1=Game.add.sprite(Game.width/2, 0, "ninja");
     ninja1.frame=0;
-
-    weapon=Game.add.sprite(55555, 50, "weapon");
+   weapon=Game.add.sprite(55555, 50, "weapon");
 
     num_of_rows=Game.height/(ninja1.height+weapon.height);
     for(let i=0; i<num_of_rows; i++){
@@ -26,6 +26,9 @@ function create(){
     row.beginFill(0x66FCFC);
     row.drawRect(0,(Game.height/num_of_rows)*2*i , Game.width, Game.height/num_of_rows);
     }
+
+   text_final = Game.add.text(Game.width / 2, 0, "FINAL", {font: "90px Times New Roman", fill: "#ffffff"})
+    text_final.x=(Game.width-text_final.width)/2
 
     ninja=Game.add.sprite((Game.width-ninja1.height)/2, Game.height-ninja1.height, "ninja");
     ninja.frame=0;
@@ -53,15 +56,33 @@ function create(){
 }
 
 function update(){
-    if(br>0){ checkWeaponPosition();
-         changeWeaponPosition();
-        checkCol();}
-updatePosition();
+    if(br>0){ 
+        checkWeaponPosition();
+        changeWeaponPosition();
+        checkCol();
+        }
+    updatePosition();
+    checkForWin();
+}
+
+function checkForWin(){
+    if(ninja.y+ninja.height<=Game.height/num_of_rows){
+        ninja.y=Game.height
+        ninja.destroy()
+        timerEvent.loop=false;  
+       you_won = Game.add.button(Game.width/2, Game.height/2, 'you_won', actionOnClickWin, this, 1,0,2);
+    }
+
+}
+
+function actionOnClickWin(){
+    create()
+    you_won.destroy();
 }
 
 function checkCol(){
-    for(i=0; i<weapons_per_row.length;i++){
-    if(Game.physics.arcade.collide(ninja ,weapons_per_row[i])==true){
+    for(i=0; i<weapons.length;i++){
+    if(Game.physics.arcade.collide(ninja ,weapons[i])==true){
     ninja.destroy()
 
     timerEvent.loop=false;  
@@ -76,15 +97,15 @@ function actionOnClick(){
 }
 
 function checkWeaponPosition(){
-    for(let i=0; i<weapons_per_row.length;i++){
-        if(weapons_per_row[i].x>Game.width){weapons_per_row.splice(i,1);
+    for(let i=0; i<weapons.length;i++){
+        if(weapons[i].x>Game.width){weapons.splice(i,1);
         br--;}
    }
 }
 
 function changeWeaponPosition(){
-    for(let i=0; i<weapons_per_row.length;i++){
-         weapons_per_row[i].x+=weaponSpeed;
+    for(let i=0; i<weapons.length;i++){
+         weapons[i].x+=weaponSpeed;
     }
    
 }
@@ -95,7 +116,7 @@ function shoot(){
     weapon.x=0-weapon.width-Math.floor(Math.random() * 10)*weapon.width
     weapon.y=i*(ninja.height+weapon.height)+ninja.height/2
     Game.physics.enable(weapon, Phaser.Physics.ARCADE);
-    weapons_per_row[br]=weapon;
+    weapons[br]=weapon;
     br++;
 }}
 
