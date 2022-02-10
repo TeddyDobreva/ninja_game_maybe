@@ -1,7 +1,7 @@
-const Game = new Phaser.Game(900, 700, Phaser.AUTO, 'GameCanvas', {preload,  create, update })
+const Game = new Phaser.Game(1600, 1000, Phaser.AUTO, 'GameCanvas', {preload,  create, update })
 
 let ninjaSpeed=3;
-let weaponSpeed=ninjaSpeed+2;
+let weaponSpeed=ninjaSpeed+0.5;
 let timerEvent;
 let br=0;
 let weapons_per_row=[];
@@ -17,17 +17,23 @@ function create(){
     ninja1=Game.add.sprite(Game.width/2, 0, "ninja");
     ninja1.frame=0;
 
+    
+
     weapon=Game.add.sprite(55555, 50, "weapon");
 
     num_of_rows=Game.height/(ninja1.height+weapon.height);
     for(let i=0; i<num_of_rows; i++){
     row = Game.add.graphics(0,0);
-    row.beginFill(0x66FBFB);
+    row.beginFill(0x66FCFC);
     row.drawRect(0,(Game.height/num_of_rows)*2*i , Game.width, Game.height/num_of_rows);
     }
 
     ninja=Game.add.sprite((Game.width-ninja1.height)/2, Game.height-ninja1.height, "ninja");
     ninja.frame=0;
+    
+    Game.physics.startSystem(Phaser.Physics.ARCADE);
+    Game.physics.enable(ninja, Phaser.Physics.ARCADE);
+
 
     ninja.animations.add("walk_forewords", [0,1,2,3], 8, true);
     ninja.animations.add("walk_left", [4,5,6,7], 8, true);
@@ -43,7 +49,7 @@ function create(){
     keyW = Game.input.keyboard.addKey(Phaser.Keyboard.W);
     keyS = Game.input.keyboard.addKey(Phaser.Keyboard.S);
 
-    timerEvent=Game.time.events.add(Phaser.Timer.SECOND * 2, shoot, this);
+    timerEvent=Game.time.events.add(Phaser.Timer.SECOND * 2.3, shoot, this);
     timerEvent.loop=true;
   
 
@@ -51,9 +57,17 @@ function create(){
 
 function update(){
     if(br>0){ checkWeaponPosition();
-         changeWeaponPosition();}
+         changeWeaponPosition();
+        checkCol();}
 updatePosition();
 }
+
+function checkCol(){
+    for(i=0; i<weapons_per_row.length;i++){
+    if(Game.physics.arcade.collide(ninja ,weapons_per_row[i])==true){
+        console.log("game over")
+    }
+}}
 
 function checkWeaponPosition(){
     for(let i=0; i<weapons_per_row.length;i++){
@@ -64,16 +78,17 @@ function checkWeaponPosition(){
 
 function changeWeaponPosition(){
     for(let i=0; i<weapons_per_row.length;i++){
-         weapons_per_row[i].x+=3;
+         weapons_per_row[i].x+=weaponSpeed;
     }
    
 }
 
 function shoot(){
-    for( i=1; i<=5; i++ ){
+    for( i=1; i<num_of_rows-1; i++ ){
     weapon=Game.add.sprite(-5557, 50, "weapon");
     weapon.x=0-weapon.width-Math.floor(Math.random() * 6)*weapon.width
     weapon.y=i*(ninja.height+weapon.height)+ninja.height/2
+    Game.physics.enable(weapon, Phaser.Physics.ARCADE);
     weapons_per_row[br]=weapon;
     br++;
 }}
