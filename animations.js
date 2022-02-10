@@ -18,8 +18,6 @@ function create(){
     ninja1=Game.add.sprite(Game.width/2, 0, "ninja");
     ninja1.frame=0;
 
-    
-
     weapon=Game.add.sprite(55555, 50, "weapon");
 
     num_of_rows=Game.height/(ninja1.height+weapon.height);
@@ -31,16 +29,14 @@ function create(){
 
     ninja=Game.add.sprite((Game.width-ninja1.height)/2, Game.height-ninja1.height, "ninja");
     ninja.frame=0;
-    
-    Game.physics.startSystem(Phaser.Physics.ARCADE);
-    Game.physics.enable(ninja, Phaser.Physics.ARCADE);
-
-
     ninja.animations.add("walk_forewords", [0,1,2,3], 8, true);
     ninja.animations.add("walk_left", [4,5,6,7], 8, true);
     ninja.animations.add("walk_right", [8,9,10,11], 8, true);
     ninja.animations.add("walk_backwords", [13,14,15,12], 8, true);
-
+    
+    Game.physics.startSystem(Phaser.Physics.ARCADE);
+    Game.physics.enable(ninja, Phaser.Physics.ARCADE);
+   
     keyUp = Game.input.keyboard.addKey(Phaser.Keyboard.UP);
     keyDown = Game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     keyRight=Game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -69,13 +65,15 @@ function checkCol(){
     ninja.destroy()
 
     timerEvent.loop=false;  
-    game_over=Game.add.sprite(Game.width/2,Game.height/2, "game_over");
-    game_over.x=(Game.width-game_over.width)/2;
-    game_over.y=(Game.height-game_over.height)/2;
-    game_over.animations.add("push", [0,1,2,1,0], 10, false);
+    game_over = Game.add.button(Game.width/2, Game.height/2, 'game_over', actionOnClick, this, 1,0,2);
 
     }
 }}
+
+function actionOnClick(){
+  create()
+    game_over.destroy();
+}
 
 function checkWeaponPosition(){
     for(let i=0; i<weapons_per_row.length;i++){
