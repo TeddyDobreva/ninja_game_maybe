@@ -3,6 +3,7 @@ const Game = new Phaser.Game(1600, 1000, Phaser.AUTO, 'GameCanvas', {preload,  c
 let ninjaSpeed=3;
 let weaponSpeed=ninjaSpeed;
 let timerEvent;
+let timerEvent_1;
 let br=0;
 let weapons=[];
 
@@ -51,7 +52,7 @@ function create(){
 
     timerEvent=Game.time.events.add(Phaser.Timer.SECOND * 2.3, shoot, this);
     timerEvent.loop=true;
-  
+    
 
 }
 
@@ -76,6 +77,8 @@ function checkForWin(){
 }
 
 function actionOnClickWin(){
+    for(i=0; i<weapons.length;i++){
+        weapons[i].destroy()}
     create()
     you_won.destroy();
 }
@@ -86,12 +89,16 @@ function checkCol(){
     ninja.destroy()
 
     timerEvent.loop=false;  
+    
+    
     game_over = Game.add.button(Game.width/2, Game.height/2, 'game_over', actionOnClick, this, 1,0,2);
 
     }
 }}
 
 function actionOnClick(){
+    for(i=0; i<weapons.length;i++){
+        weapons[i].destroy()}
   create()
     game_over.destroy();
 }
@@ -111,8 +118,11 @@ function changeWeaponPosition(){
 }
 
 function shoot(){
-    for( i=1; i<num_of_rows-1; i++ ){
-    weapon=Game.add.sprite(-5557, 50, "weapon");
+     for( i=1; i<num_of_rows-1; i++ ){
+        p=Math.floor(Math.random()+0.5)
+    if(p==0){weapon=Game.add.sprite(-5557, 50, "weapon");}
+    else{weapon=Game.add.sprite(-5557, 50, "shuriken")
+    weapon.animations.add("rotate", [], 8, true).play();}
     weapon.x=0-weapon.width-Math.floor(Math.random() * 10)*weapon.width
     weapon.y=i*(ninja.height+weapon.height)+ninja.height/2
     Game.physics.enable(weapon, Phaser.Physics.ARCADE);
